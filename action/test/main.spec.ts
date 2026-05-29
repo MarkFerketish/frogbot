@@ -138,4 +138,36 @@ describe('Frogbot Action Tests', () => {
         expect(process.env['JF_GIT_PROVIDER']).toBe('github');
         expect(process.env['JF_GIT_OWNER']).toBe('jfrog');
     });
+
+    describe('getJfrogPlatformUrl', () => {
+        afterEach(() => {
+            delete process.env.JF_URL;
+            delete process.env.JF_USE_CONFIG_PROFILE;
+        });
+
+        it('Should return the JF_URL when set', async () => {
+            process.env.JF_URL = 'https://mycompany.jfrog.io/';
+            const url = await Utils.getJfrogPlatformUrl();
+            expect(url).toBe('https://mycompany.jfrog.io/');
+        });
+
+        it('Should throw an error when JF_URL is not set and JF_USE_CONFIG_PROFILE is not true', async () => {
+            await expect(Utils.getJfrogPlatformUrl()).rejects.toThrow(
+                'JF_URL must be provided and point on your full platform URL, for example: https://mycompany.jfrog.io/',
+            );
+        });
+
+        it('Should return empty string when JF_URL is not set but JF_USE_CONFIG_PROFILE is true', async () => {
+            process.env.JF_USE_CONFIG_PROFILE = 'true';
+            const url = await Utils.getJfrogPlatformUrl();
+            expect(url).toBe('');
+        });
+
+        it('Should throw an error when JF_URL is not set and JF_USE_CONFIG_PROFILE is false', async () => {
+            process.env.JF_USE_CONFIG_PROFILE = 'false';
+            await expect(Utils.getJfrogPlatformUrl()).rejects.toThrow(
+                'JF_URL must be provided and point on your full platform URL, for example: https://mycompany.jfrog.io/',
+            );
+        });
+    });
 });
