@@ -178,7 +178,7 @@ export class Utils {
     }
     public static async getJfrogPlatformUrl(): Promise<string> {
         let jfrogUrl: string = process.env.JF_URL ?? '';
-        if (!jfrogUrl) {
+        if (!jfrogUrl && process.env.JF_USE_CONFIG_PROFILE?.toLowerCase() !== 'true') {
             throw new Error('JF_URL must be provided and point on your full platform URL, for example: https://mycompany.jfrog.io/');
         }
         return jfrogUrl;

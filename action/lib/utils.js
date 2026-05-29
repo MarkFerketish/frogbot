@@ -205,10 +205,10 @@ class Utils {
         return (0, os_1.platform)().startsWith('win');
     }
     static getJfrogPlatformUrl() {
-        var _a;
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function* () {
             let jfrogUrl = (_a = process.env.JF_URL) !== null && _a !== void 0 ? _a : '';
-            if (!jfrogUrl) {
+            if (!jfrogUrl && ((_b = process.env.JF_USE_CONFIG_PROFILE) === null || _b === void 0 ? void 0 : _b.toLowerCase()) !== 'true') {
                 throw new Error('JF_URL must be provided and point on your full platform URL, for example: https://mycompany.jfrog.io/');
             }
             return jfrogUrl;
